@@ -30,8 +30,9 @@
     
     // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
     // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+    
+    self.tableView.estimatedRowHeight = 500;
     self.tableView.rowHeight = UITableViewAutomaticDimension;
-    self.tableView.estimatedRowHeight = 300;
     
     [self.tableView registerNib:[UINib nibWithNibName:@"CJSpecialContentTableViewCell" bundle:nil] forCellReuseIdentifier:@"CJSpecialContentTableViewCell"];
     [self.tableView registerNib:[UINib nibWithNibName:@"CJSpecialsHeaderView" bundle:nil] forHeaderFooterViewReuseIdentifier:@"CJSpecialsHeaderView"];
@@ -75,7 +76,7 @@
     CJSpecialContentModel *model = self.cellDataArrM[indexPath.section];
     CJSpecialDescripModel *desModel = model.waypoints[indexPath.row];
     cell.model = desModel;
-    
+
     // Configure the cell...
     
     return cell;
@@ -90,6 +91,14 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
     return 0;
+}
+
+- (CGFloat)tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    CJSpecialContentTableViewCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
+    UIView* view = [cell.contentView.subviews objectAtIndex:0];
+    NSLog(@"cell.frame.size.height=%f",view.frame.size.height);
+    return view.frame.size.height;
 }
 
 

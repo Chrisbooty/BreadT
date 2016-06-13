@@ -13,5 +13,5 @@
 
 /** model */
 @property(nonatomic,strong) CJSpecialDescripModel *model;
-
+@property (weak, nonatomic) IBOutlet UILabel *textL;
 @end

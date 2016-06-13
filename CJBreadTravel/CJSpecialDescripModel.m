@@ -12,7 +12,7 @@
 
 + (JSONKeyMapper *)keyMapper
 {
-    return [[JSONKeyMapper alloc] initWithDictionary:@{@"waypoints.name":@"name"}];
+    return [[JSONKeyMapper alloc] initWithDictionary:@{@"poi.name":@"name"}];
 }
 
 
