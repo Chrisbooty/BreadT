@@ -31,12 +31,12 @@
 }
 
 
--(void)setModel:(CJIntersetModel *)model
+-(void)setModel:(id)model
 {
-    [_imgView sd_setImageWithURL:[NSURL URLWithString:model.cover_image] placeholderImage:[UIImage imageNamed:@"photo"]];
-    _txtL.text = model.text;
-    [_iconView sd_setImageWithURL:[NSURL URLWithString:model.avatar_m] placeholderImage:[UIImage imageNamed:@"photo"]];
-    _nameL.text = model.name;
+    [_imgView sd_setImageWithURL:[NSURL URLWithString:[model valueForKey:@"cover_image"]] placeholderImage:[UIImage imageNamed:@"photo"]];
+    _txtL.text = [model valueForKey:@"text"];
+    [_iconView sd_setImageWithURL:[NSURL URLWithString:[model valueForKey:@"avatar_m"]] placeholderImage:[UIImage imageNamed:@"photo"]];
+    _nameL.text = [model valueForKey:@"name"];
 }
 
 @end

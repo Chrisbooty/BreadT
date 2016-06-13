@@ -29,6 +29,8 @@
     // Initialization code
     _iconView.layer.cornerRadius = 15.0f;
     _iconView.clipsToBounds = YES;
+    _bgView.layer.cornerRadius = 5.0f;
+    _bgView.clipsToBounds = YES;
 }
 
 -(void)setModel:(CJSpecialModel *)model

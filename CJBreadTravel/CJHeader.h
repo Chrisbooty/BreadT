@@ -21,8 +21,18 @@
 #import "CJIntersetCollectionCell.h"
 #import "CJSpecialModel.h"
 #import "CJSpecialTableCell.h"
+#import "CJStoryDetailsModel.h"
+#import "CJStoryContentModel.h"
+#import "CJDetailsTableCell.h"
+#import "CJUserDetailsCell.h"
+#import "ScrollViewModel.h"
+#import "IntersetModel.h"
+#import "CJTools.h"
 
 #define INDEX_URL @"http://api.breadtrip.com/v2/index/"
 
+#define DETAILS_URL @"http://api.breadtrip.com/v2/new_trip/spot/?spot_id=%@"
+
+#define SPECIAL_URL @"http://api.breadtrip.com/trips/%@/waypoints/?gallery_mode=1&sign=eb31fb8abff119cf87ef1c71821ee637"
 
 #endif /* CJHeader_h */

@@ -9,6 +9,7 @@
 #import "CJIntersetCell.h"
 #import "CJIntersetCollectionCell.h"
 
+
 @interface CJIntersetCell ()<UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout>
 
 @property (weak, nonatomic) IBOutlet UICollectionView *collectView;
@@ -43,6 +44,10 @@
     CJIntersetCollectionCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"collectionCell" forIndexPath:indexPath];
     cell.model = self.dataArrM[indexPath.row];
     return cell;
+}
+- (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
+{
+    [self.delegate presentController:[[self.dataArrM[indexPath.row] spot_id] stringValue]];
 }
 
 @end

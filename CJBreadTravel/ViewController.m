@@ -8,8 +8,11 @@
 
 #import "ViewController.h"
 #import "CJHeader.h"
+#import "CJStoryDetailsController.h"
+#import "CJSpecialContentTableController.h"
+#import "MJRefresh.h"
 
-@interface ViewController ()
+@interface ViewController ()<CJIntersetCellDelegate>
 
 /** scrollView数据源 */
 @property(nonatomic,strong) NSMutableArray *scrollViewModelArrM;
@@ -26,9 +29,22 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view, typically from a nib.
+    NSArray *arr = [[CJTools sharedTool] searchEntity:@"ScrollViewModel"];
+    if (arr.count !=0) {
+        _scrollViewModelArrM = [NSMutableArray arrayWithArray:arr];
+        NSArray *array = [[CJTools sharedTool] searchEntity:@"IntersetModel"];
+        _InterestModelArrM = [NSMutableArray arrayWithArray:array];
+        [self.tableView reloadData];
+    }
+    
     [self requestData];
     
     [self.tableView registerNib:[UINib nibWithNibName:@"CJIntersetCell" bundle:nil] forCellReuseIdentifier:@"interset"];
+    
+    self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+        [self requestData];
+    }];
+    
 }
 
 - (void)requestData
@@ -37,21 +53,27 @@
     [manager GET:INDEX_URL parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
         
         NSArray *arr = responseObject[@"data"][@"elements"];
+        [self.scrollViewModelArrM removeAllObjects];
+        [[CJTools sharedTool] deleteAllObjectWithEntityName:@"ScrollViewModel"];
         for (NSDictionary *dict in arr) {
             //scrollView数据请求
             if ([dict[@"type"] integerValue] == 1) {
                 for (NSDictionary *diction in [dict[@"data"] lastObject]) {
                     CJScrollViewModel *model = [[CJScrollViewModel alloc] initWithDictionary:diction error:nil];
                     [self.scrollViewModelArrM addObject:model];
+                    [[CJTools sharedTool] insertEntityWithName:@"ScrollViewModel" withModel:diction];
                 }
             }
         }
         //精选故事数据请求
+        [self.InterestModelArrM removeAllObjects];
+        [[CJTools sharedTool] deleteAllObjectWithEntityName:@"IntersetModel"];
         for (NSDictionary *dict in arr) {
             if ([dict[@"type"] integerValue] == 10) {
                 for (NSDictionary *diction in dict[@"data"]) {
                     CJIntersetModel *model = [[CJIntersetModel alloc] initWithDictionary:diction error:nil];
                     [self.InterestModelArrM addObject:model];
+                    [[CJTools sharedTool] insertEntityWithName:@"IntersetModel" withModel:diction];
                 }
             }
         }
@@ -65,6 +87,7 @@
                 }
             }
         }
+        [self.tableView.mj_header endRefreshing];
         [self.tableView reloadData];
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
         
@@ -73,7 +96,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    if (self.specialModelArrM.count == 0) {
+    if (self.specialModelArrM.count == 0  && self.InterestModelArrM.count == 0) {
         return 0;
     }
     return self.specialModelArrM.count+2;
@@ -88,6 +111,7 @@
     {
         CJIntersetCell *cell = [tableView dequeueReusableCellWithIdentifier:@"interset"];
         cell.dataArrM = self.InterestModelArrM;
+        cell.delegate = self;
         return cell;
     }else
     {
@@ -107,6 +131,21 @@
     {
         return 216;
     }
+}
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    if (indexPath.row > 1) {
+        CJSpecialContentTableController *VC = [self.storyboard instantiateViewControllerWithIdentifier:@"specialContent"];
+        VC.id_URL = [[self.specialModelArrM[indexPath.row - 2] contentiId] stringValue];
+        [self.navigationController pushViewController:VC animated:YES];
+    }
+}
+
+-(void)presentController:(NSString *)str
+{
+    CJStoryDetailsController *VC = [self.storyboard instantiateViewControllerWithIdentifier:@"storyDetails"];
+    VC.spot_id = str;
+    [self.navigationController pushViewController:VC animated:YES];
 }
 
 #pragma mark - scrollView数据源懒加载

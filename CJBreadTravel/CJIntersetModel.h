@@ -13,7 +13,7 @@
 /** 标题 */
 @property(nonatomic,copy) NSString *text;
 /** id */
-@property(nonatomic,strong) NSNumber *trip_id;
+@property(nonatomic,strong) NSNumber *spot_id;
 /** 图标url */
 @property(nonatomic,copy) NSString *avatar_m;
 /** 用户名 */

@@ -1,5 +1,5 @@
 //
-//  CJIntersetCollectionCell.h
+//  CJUserDetailsCell.h
 //  CJBreadTravel
 //
 //  Created by mac on 16/6/13.
@@ -7,12 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-#import "CJIntersetModel.h"
+#import "CJStoryDetailsModel.h"
 
-
-@interface CJIntersetCollectionCell : UICollectionViewCell
+@interface CJUserDetailsCell : UITableViewCell
 
 /** model */
-@property(nonatomic,strong) id model;
+@property(nonatomic,strong) CJStoryDetailsModel *model;
 
 @end
